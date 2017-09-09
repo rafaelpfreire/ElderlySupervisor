@@ -1,7 +1,6 @@
 # Elderly Supervisor
 
-Embedded system based on Raspberry Pi equiped with a Lepton LWIR module the intent to supervise elderly people using computer vision algorithms
-
+Embedded system based on Raspberry Pi equiped with a Lepton LWIR module with the intent to supervise elderly people using computer vision algorithms
 
 ## Development
 
