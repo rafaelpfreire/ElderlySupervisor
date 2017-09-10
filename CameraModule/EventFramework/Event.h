@@ -1,66 +1,41 @@
 #ifndef _EVENT_H_
 #define _EVENT_H_
 
-//#include <vector>
-//#include "Listener.h"
-
-//class Listener;
-//
-//class Event
-//{
-//    public:
-//        ~Event();
-//
-//        void subscribe(Listener *l);
-//        void remove(Listener *l);
-//        void notify();
-//
-//    protected:
-//        Event();
-//
-//        std::vector<Listener*> list;
-//
-//};
-
-#include <functional>
 #include <algorithm>
 #include <vector>
+#include <memory>
+#include "Handler.h"
 
 template<class Type> class Event
 {
-    public:
-        //Event();
-        //~Event();
+    using HandlerPtr = std::shared_ptr<Handler< Type > >;
 
-        //void subscribe(std::function<void(Type)> f);
-        //void remove(std::function<void(Type)> f);
-        //void emit(Type value);
-        Event()
+    public:
+        Event(){}
+        ~Event(){}
+
+        void subscribe(HandlerPtr h)
         {
+            list.push_back(h);
         }
-        ~Event()
+
+        void remove(HandlerPtr h)
         {
+            list.erase(std::remove(list.begin(), list.end(), h), list.end());
         }
-        void subscribe(std::function<void(Type)> f)
-        {
-            list.push_back(f);
-        }
-        void remove(std::function<void(Type)> f)
-        {
-            list.erase(std::remove(list.begin(), list.end(), f), list.end());
-        }
+
         void emit(Type value)
         {
-            typename std::vector<std::function< void(Type) > >::iterator it;
+            typename std::vector<HandlerPtr>::iterator it;
             
             for(it = list.begin(); it != list.end(); ++it)
             {
-                (*it)(value);
+                (*it)->handle(value);
             }
         }
 
     protected:
-        std::vector<std::function< void(Type) > > list;
+        std::vector<HandlerPtr> list;
 };
 
 #endif // _EVENT_H_
