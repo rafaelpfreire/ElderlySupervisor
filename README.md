@@ -16,6 +16,7 @@ Default Password:
 ### Compilation
 
 **Requirements**
+    
     * CMake version 3.0 or higher (check with cmake --version)
     * Raspberry Pi cross compiler (see instructions below)
 
@@ -23,7 +24,7 @@ To install the cross compiler you need to clone the raspberry pi toolchain and c
 
 ```bash
 cd ~/
-git clone https://github.com/raspberry/tools
+git clone https://github.com/raspberrypi/tools
 
 # Use this line in case your system is 32 bits
 cp -r /usr/local/gcc-linaro-arm-linux-gnueabihf-raspbian/ /usr/local/
