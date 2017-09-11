@@ -1,6 +1,3 @@
-
-
-
 # ----- COMMON CONSTANTS ----------------------------------------------------- 
 GTEST_DIR=../../../../CotsCode/googletest
 
@@ -8,19 +5,21 @@ CFLAGS=-Wall -std=c++11
 INCL=-I$(GTEST_DIR)/googletest/include -I../..
 LIBS=-lgtest -lgtest_main -lpthread
 
-SOURCES = EventTest.cpp
+SOURCES = EventTest.cpp \
+	  LogTest.cpp
 
 BINDIR=bin
 
 
 .PHONY: default all clean kcov rasp host
+APP_NAME=CommonTestApp
 HOST_TARGET=host_unit
 RASP_TARGET=rasp_unit
 
-rasp: $(BINDIR) $(RASP_TARGET)
 default: $(BINDIR) $(HOST_TARGET)
-all: rasp default
 host: default
+rasp: $(BINDIR) $(RASP_TARGET)
+all: rasp default
 
 
 # ----- HOST TARGET ---------------------------------------------------------- 
@@ -30,7 +29,7 @@ HOST_LIBS=-L${HOST_GTEST_DIR} $(LIBS)
 HOST_OBJECTS=$(SOURCES:.cpp=.ho)
 
 %.ho: %.cpp
-	$(HOSTCC) $(CFLAGS) $(INCL) -c $< -o $@
+	$(HOSTCC) $(CFLAGS) $(INCL) -D APP_NAME=$(APP_NAME) -c $< -o $@
 
 
 $(HOST_TARGET): $(HOST_OBJECTS)
@@ -47,7 +46,7 @@ RASP_OBJECTS=$(SOURCES:.cpp=.ro)
 
 
 %.ro: %.cpp
-	$(RASPCC) $(CFLAGS) $(INCL) -c $< -o $@
+	$(RASPCC) $(CFLAGS) $(INCL) -D APP_NAME=$(APP_NAME) -c $< -o $@
 
 $(RASP_TARGET): $(RASP_OBJECTS)
 	$(RASPCC) $(CFLAGS) $(RASP_OBJECTS) $(INCL) $(RASP_LIBS) -o $(BINDIR)/$@
