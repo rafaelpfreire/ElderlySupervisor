@@ -82,22 +82,24 @@ done
 
 if [ "$bin" == "" ]; then
     printf "${RED}No machine specified. Use one of the arguments: --rasp / --host${NC}\n"
+    print_help
+    exit 1
 fi
 
 # Parse config file
 while IFS='' read -r path || [[ -n "$path"  ]]; do
 
-    pushd "${path}/test/unit/bin"
+    pushd "${path}/test/unit"
 
     printf "${YELLOW}* Running unit test from ${path}${NC}\n"
     sleep 3
 
     if [ ! -d bin ]; then
         printf "${BLUE}Binaries not found. Trying to build${NC}\n"
-        pushd ..
-        make all
-        popd
+        make all || exit 1
     fi
+
+    pushd bin
 
     cmd=
     logout=
@@ -111,8 +113,8 @@ while IFS='' read -r path || [[ -n "$path"  ]]; do
 
     # Run test
     ${cmd}
-    ${logout}
 
+    popd
     popd
 
 done < "${configFile}"
