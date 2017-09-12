@@ -1,9 +1,15 @@
 # ----- COMMON CONSTANTS ----------------------------------------------------- 
-GTEST_DIR=../../../../CotsCode/googletest
+
+APP_NAME=CommonTestApp
+PRJ_ROOT=../../../..
+
+include ${PRJ_ROOT}/make_rules/base.mak
+include ${PRJ_ROOT}/make_rules/host.mak
+include ${PRJ_ROOT}/make_rules/rasp.mak
 
 CFLAGS=-Wall -std=c++11
-INCL=-I$(GTEST_DIR)/googletest/include -I../..
-LIBS=-lgtest -lgtest_main -lpthread
+INCL=-I$(GTEST_INC) -I$(HIPPOMOCKS_INC) -I../..
+LIBS=$(GTEST_LIBS)
 
 SOURCES = EventTest.cpp \
 	  LogTest.cpp
@@ -12,7 +18,6 @@ BINDIR=bin
 
 
 .PHONY: default all clean kcov rasp host
-APP_NAME=CommonTestApp
 HOST_TARGET=host_unit
 RASP_TARGET=rasp_unit
 
@@ -23,9 +28,7 @@ all: rasp default
 
 
 # ----- HOST TARGET ---------------------------------------------------------- 
-HOSTCC=g++
-HOST_GTEST_DIR=${GTEST_DIR}/host/googletest
-HOST_LIBS=-L${HOST_GTEST_DIR} $(LIBS)
+HOST_LIBS=-L${HOST_GTEST_DIR} ${LIBS}
 HOST_OBJECTS=$(SOURCES:.cpp=.ho)
 
 %.ho: %.cpp
@@ -39,8 +42,6 @@ $(HOST_TARGET): $(HOST_OBJECTS)
 
 
 # ----- RASPBERRY TARGET ----------------------------------------------------- 
-RASPCC=arm-linux-gnueabihf-g++
-RASP_GTEST_DIR=${GTEST_DIR}/rasp/googletest
 RASP_LIBS=-L${RASP_GTEST_DIR} $(LIBS)
 RASP_OBJECTS=$(SOURCES:.cpp=.ro)
 
@@ -56,7 +57,6 @@ $(RASP_TARGET): $(RASP_OBJECTS)
 # ----- OTHER TARGETS -------------------------------------------------------- 
 .PRECIOUS: $(HOST_TARGET) $(RASP_TARGET) $(HOST_OBJECTS) $(RASP_OBJECTS)
 
-KCOV=../../../../CotsCode/kcov/host/src/kcov 
 KCOV_OUTDIR=kcov
 KCOV_FLAGS=--include-path=../..
 
