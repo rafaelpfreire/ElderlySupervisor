@@ -22,19 +22,27 @@ repos=(
     "googletest"
     "kcov"
     "hippomocks"
+    "curl"
+    "opencv"
 )
 url=(
     "https://github.com/google/googletest"
     "https://github.com/SimonKagstrom/kcov"
     "https://github.com/dascandy/hippomocks"
+    "https://github.com/curl/curl"
+    "https://github.com/opencv/opencv"
 )
 description=(
     "unit test framework"
     "code coverage analysis for unit tests"
     "mocking framework for unit tests"
+    "network data transfer library wich supports a lot of protocols"
+    "open source computer vision library"
 )
 cmakeFlags=(
     "-DBUILD_GTEST=ON -DBUILD_GMOCK=OFF"
+    ""
+    ""
     ""
     ""
 )

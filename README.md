@@ -10,15 +10,29 @@ TODO
 
 ### Environment Set Up
 
-    * The host 'pia' needs to be defined in /etc/hosts in order to run the unit tests inside the Raspberry Pi
+    * The host 'pia' needs to be defined in the file /etc/hosts in order to run the unit tests inside the Raspberry Pi
+
+You can copy a ssh key to your raspberry so you don't have to type the password every time, but this is optional
+
+```bash
+# If you don't have a ssh key yet (check ~/.ssh/), create one. Jus hit enter in all the options
+ssh-keygen
+
+# Copy the key to your raspberry. The host 'pia' should be defined
+ssh-copykey pi@pia
+```
 
 ### Compilation
 
 #### Requirements
     
-    * CMake version 3.0 or higher (check with cmake --version)
+    * CMake version 3.5 or higher (check with cmake --version)
+    * Install required packages for [curl](https://github.com/curl/curl/blob/master/GIT-INFO)
+    * Raspberry Pi cross compiler (see 'Instructions' below)
+
+### Optional
+
     * Install required packages for [kcov](https://github.com/SimonKagstrom/kcov/blob/master/INSTALL.md)
-    * Raspberry Pi cross compiler (see instructions below)
 
 #### Instructions
 To install the cross compiler you need to clone the raspberry pi toolchain and copy it inside /usr/local:
