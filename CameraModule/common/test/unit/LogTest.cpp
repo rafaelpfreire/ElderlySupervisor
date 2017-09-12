@@ -1,5 +1,7 @@
 #include <string>
+#include <syslog.h>
 #include "gtest/gtest.h"
+#include "hippomocks.h"
 #include "log.h"
 
 
@@ -24,5 +26,10 @@ class LogTest: public ::testing::Test
 TEST_F(LogTest, SimpleUseOfTheSyslog)
 {
     const std::string msg("This is a test message");
+
+    MockRepository logMocked;
+    logMocked.OnCallFunc(openlog);
+    logMocked.OnCallFunc(closelog);
+
     SYSLOG_INFO(msg);
 }
