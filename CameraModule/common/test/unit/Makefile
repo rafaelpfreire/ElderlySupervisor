@@ -12,7 +12,9 @@ INCL=-I$(GTEST_INC) -I$(HIPPOMOCKS_INC) -I../..
 LIBS=$(GTEST_LIBS)
 
 SOURCES = EventTest.cpp \
-	  LogTest.cpp
+	  LogTest.cpp \
+	  TimerTest.cpp \
+	  ../../Timer.cpp
 
 BINDIR=bin
 
