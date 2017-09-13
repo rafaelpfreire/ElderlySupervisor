@@ -8,23 +8,18 @@ using namespace std::placeholders;
 
 class IntListener
 {
-    using IntHandler = Handler<int>;
-    using IntHandlerPtr = std::shared_ptr<IntHandler>;
-
     public:
 
         IntListener(int val = 0): val(val)
         {
-            IntHandler* h = new IntHandler(std::bind(&IntListener::setVal, this, _1));
-            intHandler = std::make_shared<IntHandler>(*h);
+            intHandler.reset(new Handler<int>(std::bind(&IntListener::setVal, this, _1)));
         }
-
         ~IntListener(){}
 
         void setVal(int i){val = i;}
 
         int val;
-        IntHandlerPtr intHandler;
+        std::shared_ptr<Handler<int>> intHandler;
 };
 
 class IntArrayListener
