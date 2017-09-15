@@ -27,10 +27,11 @@ ssh-copykey pi@pia
 #### Requirements
     
     * CMake version 3.5 or higher (check with cmake --version)
+    * Perl version 5.10.0 installed. It is required for the [OpenSSL](https://github.com/openssl/openssl)
     * Install required packages for [curl](https://github.com/curl/curl/blob/master/GIT-INFO)
     * Raspberry Pi cross compiler (see 'Instructions' below)
 
-### Optional
+#### Optional
 
     * Install required packages for [kcov](https://github.com/SimonKagstrom/kcov/blob/master/INSTALL.md)
 

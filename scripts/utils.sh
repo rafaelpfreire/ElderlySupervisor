@@ -22,29 +22,46 @@ repos=(
     "googletest"
     "kcov"
     "hippomocks"
-    "curl"
-    "opencv"
+    "openssl"
+#    "libssh2"
+#    "curl"
+#    "opencv"
 )
 url=(
     "https://github.com/google/googletest"
     "https://github.com/SimonKagstrom/kcov"
     "https://github.com/dascandy/hippomocks"
-    "https://github.com/curl/curl"
-    "https://github.com/opencv/opencv"
+    "https://github.com/openssl/openssl"
+#    "https://github.com/libssh2/libssh2"
+#    "https://github.com/curl/curl"
+#    "https://github.com/opencv/opencv"
 )
 description=(
     "unit test framework"
     "code coverage analysis for unit tests"
     "mocking framework for unit tests"
-    "network data transfer library wich supports a lot of protocols"
-    "open source computer vision library"
+    "toolkit implementing the Transport Layer Security (TLS) protocols"
+#    "library implementing the SSH2 protocol"
+#    "network data transfer library wich supports a lot of protocols"
+#    "open source computer vision library"
 )
 cmakeFlags=(
     "-DBUILD_GTEST=ON -DBUILD_GMOCK=OFF"
     ""
     ""
     ""
-    ""
+#    ""
+#    ""
+#    ""
+)
+buildType=(
+    "cmake"
+    "cmake"
+    "cmake"
+    "script"
+#    ""
+#    ""
+#    ""
 )
 
 # Rpi default ip address (/etc/hosts)

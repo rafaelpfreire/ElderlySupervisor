@@ -74,12 +74,21 @@ for ((i = 0; i < ${#repos[@]}; ++i)); do
 
     pushd ${repos[$i]}
     mkdir -p $binDir
-    pushd $binDir
 
-    cmake ${cmakeFlags[$i]} $cmakeToolOption ..
-    make -j5
+    if [ "${buildType[$i]}" == "cmake" ]; then
 
-    popd
+        pushd $binDir
+        cmake ${cmakeFlags[$i]} $cmakeToolOption ..
+        make -j5
+        popd
+
+    else
+
+        script=build${repos[$i]}.sh
+        ./../../scripts/${script}
+
+    fi
+
     popd
 
 done
