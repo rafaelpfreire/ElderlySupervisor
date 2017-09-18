@@ -68,30 +68,42 @@ printf "\n\n${LBLUE}----- Building dependecies for $machineName -----\n"
 
 for ((i = 0; i < ${#repos[@]}; ++i)); do
 
-    printf "\n${GREEN}* Building ${repos[$i]}: ${description[$i]}"
-    printf "${NC}\n"
+    printf "\n${GREEN}* Building ${repos[$i]}: ${description[$i]}${NC}\n"
     sleep 3
 
     pushd ${repos[$i]}
-    mkdir -p $binDir
 
     if [ "${buildType[$i]}" == "cmake" ]; then
 
+        mkdir -p $binDir
         pushd $binDir
-        cmake ${cmakeFlags[$i]} $cmakeToolOption ..
+        printf "cmake ${cmakeFlags[$i]} $cmakeToolOption .."
+        cmake $(get_cmake_flags $i $binDir) $cmakeToolOption ..
         make -j5
         popd
 
-    else
+    elif [ "${buildType[$i]}" == "script" ]; then
 
         script=build${repos[$i]}.sh
-        ./../../scripts/${script}
+        ./../../scripts/${script} --${binDir}
 
     fi
 
     popd
 
 done
+
+
+# If build was ok, make a symbokic link to the openssl library
+printf "\n${GREEN}* Creating symbolic link for openssl library${NC}\n"
+pushd openssl
+if [ -d ${binDir}/lib ]; then
+    pushd ${binDir}/lib
+    ln -s libssl.so.1.1 libssl.so
+    ln -s libcrypto.so.1.1 libcrypto.so
+    popd
+fi
+popd
 
 
 printf "${NC}\n\n"
