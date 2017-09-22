@@ -28,8 +28,8 @@ repos=(
     "hippomocks"
     "openssl"
     "libssh2"
+    "opencv"
 #    "curl"
-#    "opencv"
 )
 url=(
     "https://github.com/google/googletest"
@@ -37,8 +37,8 @@ url=(
     "https://github.com/dascandy/hippomocks"
     "https://github.com/openssl/openssl"
     "https://github.com/libssh2/libssh2"
+    "https://github.com/opencv/opencv"
 #    "https://github.com/curl/curl"
-#    "https://github.com/opencv/opencv"
 )
 description=(
     "unit test framework"
@@ -46,11 +46,9 @@ description=(
     "mocking framework for unit tests"
     "toolkit implementing the Transport Layer Security (TLS) protocols"
     "library implementing the SSH2 protocol"
+    "open source computer vision library"
 #    "network data transfer library wich supports a lot of protocols"
-#    "open source computer vision library"
 )
-
-#cmake -DCMAKE_TOOLCHAIN_FILE=../../../scripts/toolchain-arm-linux.cmake -DCRYPTO_BACKEND=OpenSSL -DOPENSSL_ROOT_DIR=../../openssl/rasp -DOPENSSL_LIBRARIES=../../openssl/rasp/lib -DOPENSSL_CRYPTO_LIBRARY=../../openssl/rasp/lib/libcrypto.so.1.1 -DOPENSSL_SSL_LIBRARY=../../openssl/rasp/lib/libssl.so.1.1 -DOPENSSL_INCLUDE_DIR=../../openssl/rasp/include -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON -DENABLE_DEBUG_LOGGING=ON ../
 
 buildType=(
     "cmake"
@@ -58,18 +56,24 @@ buildType=(
     "cmake"
     "script"
     "cmake"
-#    ""
-#    ""
+    "cmake"
 )
 
-
 # CMake flags
-get_cmake_flags () {
+get_cmake_flags() {
 
     idx=$1
     trg=$2
 
     sslRootDir=../../openssl/${trg}
+    ocvRootDir=../../opencv/${trg}
+
+    gtkflag=
+    if [ "$trg" == "rasp" ]; then
+        gtkflag=OFF
+    else
+        gtkflag=ON
+    fi
 
     cmakeFlags=(
         "-DBUILD_GTEST=ON -DBUILD_GMOCK=OFF"
@@ -84,8 +88,18 @@ get_cmake_flags () {
             -DOPENSSL_INCLUDE_DIR=${sslRootDir}/include \
             -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF \
             -DBUILD_SHARED_LIBS=ON -DENABLE_DEBUG_LOGGING=ON"
-    #    ""
-    #    ""
+        "-DCMAKE_BUILD_TYPE=RELEASE \
+            -DCMAKE_INSTALL_PREFIX=${ocvRootDir} \
+            -DBUILD_EXAMPLES=OFF \
+            -DBUILD_DOCS=OFF \
+            -DBUILD_PERF_TESTS=OFF \
+            -DBUILD_TESTS=OFF \
+            -DWITH_TBB=ON -DBUILD_TBB=ON \
+            -DWITH_V4L=ON -DWITH_OPENGL=ON \
+            -DWITH_OPENMP=ON -DWITH_IPP=ON \
+            -DWITH_NVCUVID=ON -DWITH_CUDA=ON \
+            -DWITH_CSTRIPES=ON -DWITH_OPENCL=ON \
+            -DWITH_GTK=${gtkflag}"
     )
 
     echo ${cmakeFlags[$idx]}

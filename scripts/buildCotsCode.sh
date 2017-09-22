@@ -77,8 +77,9 @@ for ((i = 0; i < ${#repos[@]}; ++i)); do
 
         mkdir -p $binDir
         pushd $binDir
-        printf "cmake ${cmakeFlags[$i]} $cmakeToolOption .."
-        cmake $(get_cmake_flags $i $binDir) $cmakeToolOption ..
+        flags=$(get_cmake_flags $i $binDir)
+        printf "cmake $flags $cmakeToolOption .."
+        cmake $flags $cmakeToolOption ..
         make -j5
         popd
 
