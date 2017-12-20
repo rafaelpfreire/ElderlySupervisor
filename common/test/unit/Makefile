@@ -8,13 +8,15 @@ include ${PRJ_ROOT}/make_rules/host.mak
 include ${PRJ_ROOT}/make_rules/rasp.mak
 
 CFLAGS=-Wall -std=c++11
-INCL=-I$(GTEST_INC) -I$(HIPPOMOCKS_INC) -I../..
-LIBS=$(GTEST_LIBS)
+INCL=-I$(GTEST_INC) -I$(HIPPOMOCKS_INC) -I$(SSH2_INC) -I../..
+LIBS=$(GTEST_LIBS) $(SSH2_LIBS) $(OPENSSL_LIBS) 
 
 SOURCES = EventTest.cpp \
 	  LogTest.cpp \
 	  TimerTest.cpp \
-	  ../../Timer.cpp
+	  LibSSH2FacadeTest.cpp \
+	  ../../Timer.cpp \
+	  ../../LibSSH2Facade.cpp
 
 BINDIR=bin
 
@@ -30,29 +32,31 @@ all: rasp default
 
 
 # ----- HOST TARGET ---------------------------------------------------------- 
-HOST_LIBS=-L${HOST_GTEST_DIR} ${LIBS}
+HOST_LIBS=-L${HOST_GTEST_DIR} -L${HOST_OPENSSL_DIR} -L${HOST_SSH2_DIR} $(LIBS)
+HOST_INCL=-I${HOST_SSH2_DIR} ${INCL}
 HOST_OBJECTS=$(SOURCES:.cpp=.ho)
 
 %.ho: %.cpp
-	$(HOSTCC) $(CFLAGS) $(INCL) -D APP_NAME=$(APP_NAME) -c $< -o $@
+	$(HOSTCC) $(CFLAGS) $(HOST_INCL) -D APP_NAME=$(APP_NAME) -c $< -o $@
 
 
 $(HOST_TARGET): $(HOST_OBJECTS)
-	$(HOSTCC) $(CFLAGS) $(HOST_OBJECTS) $(INCL) $(HOST_LIBS) -o $(BINDIR)/$@
+	$(HOSTCC) $(CFLAGS) $(HOST_OBJECTS) $(HOST_INCL) $(HOST_LIBS) -o $(BINDIR)/$@
 
 
 
 
 # ----- RASPBERRY TARGET ----------------------------------------------------- 
-RASP_LIBS=-L${RASP_GTEST_DIR} $(LIBS)
+RASP_LIBS=-L${RASP_GTEST_DIR} -L${RASP_OPENSSL_DIR} -L${RASP_SSH2_DIR} $(LIBS)
+RASP_INCL=-I${RASP_SSH2_DIR} ${INCL}
 RASP_OBJECTS=$(SOURCES:.cpp=.ro)
 
 
 %.ro: %.cpp
-	$(RASPCC) $(CFLAGS) $(INCL) -D APP_NAME=$(APP_NAME) -c $< -o $@
+	$(RASPCC) $(CFLAGS) $(RASP_INCL) -D APP_NAME=$(APP_NAME) -c $< -o $@
 
 $(RASP_TARGET): $(RASP_OBJECTS)
-	$(RASPCC) $(CFLAGS) $(RASP_OBJECTS) $(INCL) $(RASP_LIBS) -o $(BINDIR)/$@
+	$(RASPCC) $(CFLAGS) $(RASP_OBJECTS) $(RASP_INCL) $(RASP_LIBS) -o $(BINDIR)/$@
 
 
 

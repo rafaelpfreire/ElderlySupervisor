@@ -2,7 +2,7 @@
 #define _LIBSSH2FACADE_H_
 
 #include <string>
-#include "common/log.h"
+#include "log.h"
 
 using namespace std;
 
@@ -13,7 +13,7 @@ class LibSSH2Facade
         static bool scpWrite(string ip, string username, string pbKeyFilePath, string filePath);
 
     private:
-        FileTransfer() {}
-}
+        LibSSH2Facade() {}
+};
 
 #endif // _LIBSSH2FACADE_H_
