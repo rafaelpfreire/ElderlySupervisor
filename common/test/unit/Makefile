@@ -1,7 +1,7 @@
 # ----- COMMON CONSTANTS ----------------------------------------------------- 
 
 APP_NAME=CommonTestApp
-PRJ_ROOT=../../../..
+PRJ_ROOT=../../..
 
 include ${PRJ_ROOT}/make_rules/base.mak
 include ${PRJ_ROOT}/make_rules/host.mak
