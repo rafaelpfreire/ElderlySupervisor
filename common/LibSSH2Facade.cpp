@@ -1,5 +1,5 @@
-#include <sstream>
 #include <fstream>
+#include <sstream>
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -9,11 +9,6 @@
 #include "LibSSH2Facade.h"
 #include "log.h"
 
-
-
-
-// TODO: Remove
-#include <iostream>
 
 using namespace std;
 
@@ -164,17 +159,5 @@ LibSSH2Facade::SSH2_ERROR_CODE LibSSH2Facade::scpRead(
     channel = NULL;
     disconnect(session);
 
-    return SSH2_SUCCESS;
-}
-
-LibSSH2Facade::SSH2_ERROR_CODE LibSSH2Facade::scpWrite(
-        string ip,
-        string username,
-        string pbKeyFilePath,
-        string prKeyFilePath,
-        string passPhrase,
-        string fromPath,
-        string toPath)
-{
     return SSH2_SUCCESS;
 }

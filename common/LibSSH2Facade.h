@@ -32,15 +32,6 @@ class LibSSH2Facade
                 string fromPath,
                 string toPath);
 
-        static SSH2_ERROR_CODE scpWrite(
-                string ip,
-                string username,
-                string pbKeyFilePath,
-                string prKeyFilePath,
-                string passPhrase,
-                string fromPath,
-                string toPath);
-
     protected:
         static void disconnect(LIBSSH2_SESSION *session);
 

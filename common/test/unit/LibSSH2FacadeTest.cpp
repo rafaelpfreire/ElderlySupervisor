@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "hippomocks.h"
 
+#include <sstream>
 #include <libssh2.h>
 #include "libssh2_config.h"
 #include <sys/socket.h>
@@ -47,6 +48,8 @@ class LibSSH2FacadeTest: public ::testing::Test
 //
 TEST_F(LibSSH2FacadeTest, ScpReadSockNoConnection)
 {
+    LibSSH2Facade::SSH2_ERROR_CODE errorCode;
+
     MockRepository mock;
     mock.OnCallFunc(socket).Return(10);
     mock.OnCallFunc(inet_addr).Return(218331402);
@@ -54,14 +57,15 @@ TEST_F(LibSSH2FacadeTest, ScpReadSockNoConnection)
     mock.OnCallFunc(openlog);
     mock.OnCallFunc(closelog);
 
-    LibSSH2Facade::SSH2_ERROR_CODE errorCode = LibSSH2Facade::scpRead(
-            ip, username, pbKey, prKey, passPhrase, fromFile, toFile);
+    errorCode = LibSSH2Facade::scpRead(ip, username, pbKey, prKey, passPhrase, fromFile, toFile);
     EXPECT_EQ(errorCode, LibSSH2Facade::SSH2_SOCK_NO_CONNECTION);
     EXPECT_STREQ(LibSSH2Facade::str(errorCode).c_str(), "SSH2_SOCK_NO_CONNECTION");
 }
 
 TEST_F(LibSSH2FacadeTest, ScpReadInitSessionFail)
 {
+    LibSSH2Facade::SSH2_ERROR_CODE errorCode;
+
     MockRepository mock;
     mock.OnCallFunc(socket).Return(10);
     mock.OnCallFunc(inet_addr).Return(218331402);
@@ -70,8 +74,7 @@ TEST_F(LibSSH2FacadeTest, ScpReadInitSessionFail)
     mock.OnCallFunc(openlog);
     mock.OnCallFunc(closelog);
 
-    LibSSH2Facade::SSH2_ERROR_CODE errorCode = LibSSH2Facade::scpRead(
-            ip, username, pbKey, prKey, passPhrase, fromFile, toFile);
+    errorCode = LibSSH2Facade::scpRead(ip, username, pbKey, prKey, passPhrase, fromFile, toFile);
     EXPECT_EQ(errorCode, LibSSH2Facade::SSH2_INIT_SESSION_FAIL);
     EXPECT_STREQ(LibSSH2Facade::str(errorCode).c_str(), "SSH2_INIT_SESSION_FAIL");
 }
@@ -79,6 +82,7 @@ TEST_F(LibSSH2FacadeTest, ScpReadInitSessionFail)
 TEST_F(LibSSH2FacadeTest, ScpReadSessionHandshakeFail)
 {
     LIBSSH2_SESSION *session;
+    LibSSH2Facade::SSH2_ERROR_CODE errorCode;
 
     MockRepository mock;
     mock.OnCallFunc(socket).Return(10);
@@ -89,8 +93,7 @@ TEST_F(LibSSH2FacadeTest, ScpReadSessionHandshakeFail)
     mock.OnCallFunc(openlog);
     mock.OnCallFunc(closelog);
 
-    LibSSH2Facade::SSH2_ERROR_CODE errorCode = LibSSH2Facade::scpRead(
-            ip, username, pbKey, prKey, passPhrase, fromFile, toFile);
+    errorCode = LibSSH2Facade::scpRead(ip, username, pbKey, prKey, passPhrase, fromFile, toFile);
     EXPECT_EQ(errorCode, LibSSH2Facade::SSH2_SESSION_HANDSHAKE_FAIL);
     EXPECT_STREQ(LibSSH2Facade::str(errorCode).c_str(), "SSH2_SESSION_HANDSHAKE_FAIL");
 }
@@ -98,6 +101,7 @@ TEST_F(LibSSH2FacadeTest, ScpReadSessionHandshakeFail)
 TEST_F(LibSSH2FacadeTest, ScpReadAuthenticationFail)
 {
     LIBSSH2_SESSION *session;
+    LibSSH2Facade::SSH2_ERROR_CODE errorCode;
 
     MockRepository mock;
     mock.OnCallFunc(socket).Return(10);
@@ -112,8 +116,7 @@ TEST_F(LibSSH2FacadeTest, ScpReadAuthenticationFail)
     mock.OnCallFunc(openlog);
     mock.OnCallFunc(closelog);
 
-    LibSSH2Facade::SSH2_ERROR_CODE errorCode = LibSSH2Facade::scpRead(
-            ip, username, pbKey, prKey, passPhrase, fromFile, toFile);
+    errorCode = LibSSH2Facade::scpRead(ip, username, pbKey, prKey, passPhrase, fromFile, toFile);
     EXPECT_EQ(errorCode, LibSSH2Facade::SSH2_AUTHENTICATION_FAIL);
     EXPECT_STREQ(LibSSH2Facade::str(errorCode).c_str(), "SSH2_AUTHENTICATION_FAIL");
 }
@@ -121,6 +124,7 @@ TEST_F(LibSSH2FacadeTest, ScpReadAuthenticationFail)
 TEST_F(LibSSH2FacadeTest, ScpReadInitChannelFail)
 {
     LIBSSH2_SESSION *session;
+    LibSSH2Facade::SSH2_ERROR_CODE errorCode;
 
     MockRepository mock;
     mock.OnCallFunc(socket).Return(10);
@@ -136,8 +140,7 @@ TEST_F(LibSSH2FacadeTest, ScpReadInitChannelFail)
     mock.OnCallFunc(openlog);
     mock.OnCallFunc(closelog);
 
-    LibSSH2Facade::SSH2_ERROR_CODE errorCode = LibSSH2Facade::scpRead(
-            ip, username, pbKey, prKey, passPhrase, fromFile, toFile);
+    errorCode = LibSSH2Facade::scpRead(ip, username, pbKey, prKey, passPhrase, fromFile, toFile);
     EXPECT_EQ(errorCode, LibSSH2Facade::SSH2_INIT_CHANNEL_FAIL);
     EXPECT_STREQ(LibSSH2Facade::str(errorCode).c_str(), "SSH2_INIT_CHANNEL_FAIL");
 }
