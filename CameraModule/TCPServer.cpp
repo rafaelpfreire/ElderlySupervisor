@@ -2,6 +2,7 @@
 #include <sstream>
 #include <string.h>
 #include <unistd.h>
+#include <sys/time.h>
 #include "log.h"
 
 int bindWrapper(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
@@ -98,6 +99,8 @@ bool TCPServer::listen()
 
 bool TCPServer::receive(std::string &rcv)
 {
+    timeval timeout = {5, 0}; // 5 seconds timeout
+    fd_set readset;
     bool ret = true;
     char buffer[256];
 
@@ -105,10 +108,27 @@ bool TCPServer::receive(std::string &rcv)
 
     if((ssock > 0) && (csock > 0))
     {
-        if(recv(csock, buffer, 255, 0) <= 0)
+        FD_ZERO(&readset);
+        FD_SET(csock, &readset);
+
+        /* Wait for message with a timeout */
+        if( select(csock+1, &readset, NULL, NULL, &timeout) > 0 )
         {
-            SYSLOG_ERR("Error reading from client");
-            rcv = "";
+            /* Check if there is message to receive */
+            if( FD_ISSET(csock, &readset) )
+            {
+                if( recv(csock, buffer, 255, 0) <= 0 )
+                {
+                    ret = false;
+                }
+            }
+            else
+            {
+                ret = false;
+            }
+        }
+        else
+        {
             ret = false;
         }
     }
