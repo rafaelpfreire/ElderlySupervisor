@@ -105,7 +105,7 @@ bool TCPServer::receive(std::string &rcv)
 
     if((ssock > 0) && (csock > 0))
     {
-        if(read(csock, buffer, 255) == 0)
+        if(recv(csock, buffer, 255, 0) <= 0)
         {
             SYSLOG_ERR("Error reading from client");
             rcv = "";
